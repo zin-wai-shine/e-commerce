@@ -15,6 +15,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class AuthServiceProvider extends ServiceProvider
 {
+    /*public $token;*/
     /**
      * The model to policy mappings for the application.
      *
@@ -26,6 +27,12 @@ class AuthServiceProvider extends ServiceProvider
         User::class     => UserPolicy::class,
         SubCategory::class => SubCategoryPolicy::class
     ];
+
+
+/*    public function __construct($token) {
+        $this->token = $token;
+    }*/
+
 
     /**
      * Register any authentication / authorization services.
@@ -42,7 +49,6 @@ class AuthServiceProvider extends ServiceProvider
                 ->subject('Verify Email Address')
                 ->line('Click the button below to verify your email address.')
                 ->action('Verify Email Address', $url);
-
         });
 
     }

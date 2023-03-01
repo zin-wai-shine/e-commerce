@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class AuthApiController extends Controller
 {
@@ -45,42 +47,6 @@ class AuthApiController extends Controller
         return response()->json(["message" => "User Not Found"],404);
 
     }
-
-
-
-
-    public function sendVerificationEmail(Request $request){
-
-
-        if($request->user()->hasVerifiedEmail()){
-
-            return response()->json([ "message" => "Already Verified", "verified" => true ]);
-
-        }
-
-        $request->user()->sendEmailVerificationNotification();
-
-        return response()->json([ "message" => "verification link was send", "send" => true ]);
-
-    }
-
-
-
-    public function verify(EmailVerificationRequest $request){
-
-
-        if($request->user()->hasVerifiedEmail()){
-            return response()->json([ "message" => "Already Verified", "verified" => true ],422);
-        }
-
-        if($request->user()->markEmailAsVerified()){
-            event(new Verified($request->user()));
-        }
-
-        return response()->json(['message' => 'email has been verified', 'verified' => true]);
-
-    }
-
 
 
     public function login(Request $request){

@@ -19,19 +19,37 @@ Route::prefix('v1')->group(function(){
     Route::post("login", [\App\Http\Controllers\AuthApiController::class, "login"])->name("login");
     Route::post("register", [\App\Http\Controllers\AuthApiController::class, "register"])->name("register");
 
+    /*In there, we must need to define name the default of email verify name is (verification.verify)*/
+    Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\EmailVerificationController::class, "verify"])->name('verification.verify');
+
+
+    /*Send Reset Password Link & Reset Password*/
+    /*
+        In there, we must need to define name the default of reset password is (password.reset)
+        If forgot to define the name, got error ( Route [password.reset] not defined )
+    */
+    Route::post('forgot-password', [\App\Http\Controllers\ResetPasswordController::class, 'forgotPassword'])->name('password.reset');
+    Route::post('reset-password', [\App\Http\Controllers\ResetPasswordController::class, 'resetPassword']);
+
+
     Route::middleware(['auth:sanctum'])->group(function (){
 
-        Route::post("email/verification-notification", [\App\Http\Controllers\AuthApiController::class, "sendVerificationEmail"])
+        /*
+            In there, we must need to define name the default of send "email verification link " name is (verification.send)
+        */
+        Route::post("email/verification-notification", [\App\Http\Controllers\EmailVerificationController::class, "sendVerificationEmail"])
             ->name('verification.send');
-
-        Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\AuthApiController::class, "verify"])->name('verification.verify');
 
         Route::middleware(['verified'])->group(function (){
 
             Route::post("logout",[\App\Http\Controllers\AuthApiController::class,"logout"])->name("logout");
+
             Route::post("logoutAll",[\App\Http\Controllers\AuthApiController::class,"logoutAll"])->name("logoutAll");
+
             Route::post("logoutAllWithoutCurrentAccess",[\App\Http\Controllers\AuthApiController::class,"logoutAllWithoutCurrentAccess"])->name("logoutAllWithoutCurrentAccess");
+
             Route::get("tokens",[\App\Http\Controllers\AuthApiController::class,"tokens"])->name("tokens");
+
 
             Route::resource("user", \App\Http\Controllers\UserController::class);
 

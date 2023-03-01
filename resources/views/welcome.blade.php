@@ -17,7 +17,7 @@
         <style>
             body {
                 font-family: 'Nunito', sans-serif;
-            }
+        }
         </style>
     </head>
     <body class="antialiased">
